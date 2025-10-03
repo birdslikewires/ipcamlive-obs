@@ -99,15 +99,9 @@
         async function loadStream() {
             const video = document.getElementById('player');
             
-			const url = fetchStreamData()
+			const url = await fetchStreamData()
 
-            // Try direct HLS URL based on the pattern
-            // const directUrls = [
-            //     'http://s52.ipcamlive.com/streams/34qilxrrbu0vy1gfy/stream.m3u8',
-            //     'https://s52.ipcamlive.com/streams/34qilxrrbu0vy1gfy/stream.m3u8',
-            //     'http://s52.ipcamlive.com/streams/34qilxrrbu0vy1gfy/index.m3u8',
-            //     'http://s52.ipcamlive.com:6017/streams/34qilxrrbu0vy1gfy/stream.m3u8'
-            // ];
+  
 
             // Check if browser supports HLS natively (Safari)
 			try {
@@ -173,7 +167,6 @@
                 });
             }
             
-
 
         function scheduleRefresh() {
             setTimeout(() => {
