@@ -51,7 +51,13 @@
 
 	<script>
 
-		const streamAlias = '5582ee930f0e6';
+		function getStreamAliasFromUrl() {
+			const urlParams = new URLSearchParams(window.location.search);
+			const alias = urlParams.get('alias'); 
+			return alias || '5582ee930f0e6';
+		}
+
+		const streamAlias = getStreamAliasFromUrl();
 		const refreshInterval = 1000 * 60 * 8;
 
 		function updateStatus(message) {
@@ -69,11 +75,12 @@
 		async function fetchStreamData() {
 			try {
 				// First, get the stream info
-				const infoUrl = `https://ipcamlive.com/player/getcamerastreamstate.php?alias=${streamAlias}`;
+				const infoUrl = `https://www.ipcamlive.com/player/getcamerastreamstate.php?alias=${streamAlias}`;
 				updateStatus('Fetching stream info...');
 				
-				// If you need it, the path to the logo would be, eg.: http://www.ipcamlive.com/resources/logos/668bfc5eaf02c.jpg
+				// If you need it, the path to the logo would be, eg.: https://www.ipcamlive.com/resources/logos/668bfc5eaf02c.jpg
 				// The snapshot would be: https://s103.ipcamlive.com/streams/670lktcof5alnrjun/snapshot.jpg
+				// There is also a remote player at, eg. https://g0.ipcamlive.com/player/player.php?alias=6745eb6be37dd
 
 				const response = await fetch(infoUrl);
 				const data = await response.json();
