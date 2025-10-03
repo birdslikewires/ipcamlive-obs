@@ -69,9 +69,12 @@
         async function fetchStreamData() {
             try {
                 // First, get the stream info
-                const infoUrl = `https://ipcamlive.com/player/getstreaminfo.php?alias=${streamAlias}`;
+                const infoUrl = `https://ipcamlive.com/player/getcamerastreamstate.php?alias=${streamAlias}`;
                 updateStatus('Fetching stream info...');
                 
+				// If you need it, the path to the logo would be, eg.: http://www.ipcamlive.com/resources/logos/668bfc5eaf02c.jpg
+				// The snapshot would be: https://s103.ipcamlive.com/streams/670lktcof5alnrjun/snapshot.jpg
+
                 const response = await fetch(infoUrl);
                 const data = await response.json();
                 
@@ -96,35 +99,36 @@
         async function loadStream() {
             const video = document.getElementById('player');
             
+			const url = fetchStreamData()
+
             // Try direct HLS URL based on the pattern
-            const directUrls = [
-                'http://s52.ipcamlive.com/streams/34qilxrrbu0vy1gfy/stream.m3u8',
-                'https://s52.ipcamlive.com/streams/34qilxrrbu0vy1gfy/stream.m3u8',
-                'http://s52.ipcamlive.com/streams/34qilxrrbu0vy1gfy/index.m3u8',
-                'http://s52.ipcamlive.com:6017/streams/34qilxrrbu0vy1gfy/stream.m3u8'
-            ];
+            // const directUrls = [
+            //     'http://s52.ipcamlive.com/streams/34qilxrrbu0vy1gfy/stream.m3u8',
+            //     'https://s52.ipcamlive.com/streams/34qilxrrbu0vy1gfy/stream.m3u8',
+            //     'http://s52.ipcamlive.com/streams/34qilxrrbu0vy1gfy/index.m3u8',
+            //     'http://s52.ipcamlive.com:6017/streams/34qilxrrbu0vy1gfy/stream.m3u8'
+            // ];
 
             // Check if browser supports HLS natively (Safari)
-            for (const url of directUrls) {
-                try {
-                    updateStatus(`Trying ${url}...`);
-                    video.src = url;
-                    
-                    // Wait for video to start playing
-                    await new Promise((resolve, reject) => {
-                        video.addEventListener('loadeddata', resolve, { once: true });
-                        video.addEventListener('error', reject, { once: true });
-                        setTimeout(reject, 5000); // 5 second timeout (reduced from 10)
-                    });
-                    
-                    await video.play();
-                    updateStatus('Stream playing');
-                    scheduleRefresh();
-                    return;
-                } catch (error) {
-                    console.log(`Failed to load ${url}:`, error);
-                }
-            }
+			try {
+				updateStatus(`Trying ${url}...`);
+				video.src = url;
+				
+				// Wait for video to start playing
+				await new Promise((resolve, reject) => {
+					video.addEventListener('loadeddata', resolve, { once: true });
+					video.addEventListener('error', reject, { once: true });
+					setTimeout(reject, 5000); // 5 second timeout (reduced from 10)
+				});
+				
+				await video.play();
+				updateStatus('Stream playing');
+				scheduleRefresh();
+				return;
+			} catch (error) {
+				console.log(`Failed to load ${url}:`, error);
+			}
+
 
             // If direct URLs don't work, try with HLS.js library
             updateStatus('Loading HLS library...');
