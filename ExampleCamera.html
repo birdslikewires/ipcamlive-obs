@@ -45,7 +45,7 @@
 </head>
 <body>
 	<div id="status">Fetching stream...</div>
-	<video id="player" controls autoplay muted playsinline></video>
+	<video id="player" controls autoplay playsinline></video>
 	<div id="error"></div>
 
 	<script>
@@ -83,8 +83,6 @@
 					console.log('Stream details:', details);
 					
 					// Construct the direct stream URL
-					// Based on the response, the stream is at s52.ipcamlive.com
-					// with streamid: 34qilxrrbu0vy1gfy
 					const streamUrl = `${details.address}streams/${details.streamid}/stream.m3u8`;
 					
 					updateStatus('Loading direct stream...');
