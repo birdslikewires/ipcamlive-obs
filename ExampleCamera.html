@@ -144,7 +144,7 @@
                         }
                     });
                     
-                    tryHlsUrls(hls, directUrls);
+                    tryHlsUrls(hls, url);
                 } else {
                     showError('HLS is not supported in this browser');
                 }
@@ -152,24 +152,9 @@
             document.head.appendChild(script);
         }
 
-        function tryHlsUrls(hls, urls) {
-            let urlIndex = 0;
-            
-            function tryNextUrl() {
-                if (urlIndex >= urls.length) {
-                    if (retryCount < maxRetries) {
-                        retryCount++;
-                        updateStatus(`Retry attempt ${retryCount}/${maxRetries}...`);
-                        setTimeout(() => loadStream(), 5000);
-                    } else {
-                        showError('Could not load stream. The stream might be blocking direct access.');
-                    }
-                    return;
-                }
-                
-                const url = urls[urlIndex++];
-                updateStatus(`Trying HLS: ${url}...`);
-                
+        function tryHlsUrls(hls, url) {
+           
+  
                 hls.loadSource(url);
                 hls.attachMedia(document.getElementById('player'));
                 
@@ -188,8 +173,7 @@
                 });
             }
             
-            tryNextUrl();
-        }
+
 
         function scheduleRefresh() {
             setTimeout(() => {
