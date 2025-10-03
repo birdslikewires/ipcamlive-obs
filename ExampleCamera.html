@@ -43,16 +43,16 @@
 		}
 	</style>
 </head>
+
 <body>
 	<div id="status">Fetching stream...</div>
 	<video id="player" controls autoplay playsinline></video>
 	<div id="error"></div>
 
 	<script>
+
 		const streamAlias = '5582ee930f0e6';
-		const refreshInterval = 4 * 60 * 1000; // 4 minutes
-		let retryCount = 0;
-		const maxRetries = 3;
+		const refreshInterval = 1000 * 60 * 8;
 
 		function updateStatus(message) {
 			document.getElementById('status').textContent = message;
@@ -185,6 +185,7 @@
 				video.play().catch(e => console.log('Play failed:', e));
 			}
 		});
+
 	</script>
 </body>
 </html>
